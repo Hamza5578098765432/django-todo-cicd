@@ -5,6 +5,7 @@ pipeline {
         skipDefaultCheckout(true)
     }
 
+
     stages {
         stage('Code Checkout') {
             steps {
@@ -27,18 +28,19 @@ pipeline {
         }
 
         stage('Build') {
-            agent {
-                docker {
-                    image 'python:3.9-slim'
-                }
-            }
-
-            steps {
-                sh 'pip install django==3.2'
-                sh 'python manage.py check'
-                echo 'Django check passed.'
-            }
+    agent {
+        docker {
+            image 'python:3.9-slim'
+            args '-u root'
         }
+    }
+
+    steps {
+        sh 'pip install django==3.2'
+        sh 'python manage.py check'
+        echo 'Django check passed.'
+    }
+}
 
         stage('Deploy') {
             when {
