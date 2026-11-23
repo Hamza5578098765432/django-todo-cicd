@@ -3,14 +3,18 @@ pipeline {
 
   stages {
       stage('Build') {
-      agent {
-        docker { image 'django:latest' }
-      }
-      steps {
-            // Run the Django server in the foreground
-            sh 'python3 manage.py check' 
-            echo 'Django server started. Proceeding to next stage...'
-      }
+    agent {
+        docker {
+            image 'python:3.9-slim'
+        }
+    }
+
+    steps {
+        sh 'pip install django==3.2'
+        sh 'python manage.py check'
+        echo 'Django check passed.'
+    }
+}
     }
 
     stage('Deploy') {
